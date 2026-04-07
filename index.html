@@ -1,67 +1,35 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Angry Birds Chrome - Network Debug</title>
+    <title>Angry Birds Chrome - Clean Boot</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <style>
-      #debug-log {
-        position: fixed; top: 0; left: 0; width: 100%; height: 35vh; 
-        background: rgba(0,0,0,0.9); color: #0f0; z-index: 9999; 
-        overflow-y: auto; font-family: monospace; font-size: 13px; padding: 10px;
-        box-sizing: border-box; word-wrap: break-word;
-      }
-    </style>
-    
-    <script>
-      // 1. 拦截普通报错
-      window.onerror = function(msg, url, line) {
-        var log = document.getElementById('debug-log');
-        if(log) log.innerHTML += '<br/>❌ 代码报错: ' + msg;
-        return false;
-      };
-      
-      // 2. 拦截打印日志
-      var oldLog = console.log;
-      console.log = function(msg) {
-        var log = document.getElementById('debug-log');
-        if(log) log.innerHTML += '<br/>✅ 日志: ' + msg;
-        oldLog.apply(console, arguments);
-      };
-
-      // 3. 🚨 核心功能：拦截所有 404 找不到的文件 🚨
-      window.addEventListener('error', function(e) {
-        if(e.target && (e.target.tagName === 'IMG' || e.target.tagName === 'SCRIPT' || e.target.tagName === 'IFRAME')) {
-            var log = document.getElementById('debug-log');
-            if(log) log.innerHTML += '<br/><span style="color:red">🚨 致命错误 (404 找不到文件): ' + e.target.src + '</span>';
-        }
-      }, true); // 捕获网络错误
-    </script>
-
-    <link href='https://fonts.googleapis.com/css?family=Terminal+Dosis:800' rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="css/angry_birds_chrome.css" type="text/css">
 
-    <script type="text/javascript" src="fowl/fowl.nocache.js"></script>
-  </head>
-  <body>
-    <div id="debug-log">网络雷达已启动，正在扫描失踪文件...<br/></div>
-
-    <div class="gamecont" id="content">
-      <div id='gameDiv' style="display: inline-block;">
-        <div id='playn-root' style="border: 2px solid red; min-height: 400px; width: 800px; display: flex; justify-content: center; align-items: center;">
-          <div id="loading">
-            <img src="images/loading_image_bird.png" alt="" />
-          </div>
-        </div>
-      </div>
-    </div>
-
     <script type="text/javascript">
-      window.onload = function() {
-        console.log("正在等待引擎读取数据...");
-        document.getElementById('content').style.display = 'block';
+      window.google = {
+        load: function(module, version, options) {
+          console.log("已拦截并伪造 Google 接口加载: " + module);
+        },
+        payments: {
+          inapp: {
+            buy: function() { console.log("支付已被绕过"); }
+          }
+        }
       };
     </script>
+
+    <script type="text/javascript" src="fowl/fowl.nocache.js"></script>
+    
+  </head>
+  <body style="background-color: #000; color: white; text-align: center; padding-top: 50px;">
+
+    <h2>正在尝试纯净启动...</h2>
+    <p>如果游戏能运行，红框内将出现画面</p>
+
+    <div id='playn-root' style="border: 2px solid red; width: 800px; height: 600px; margin: 0 auto; background: #222;">
+      <img src="images/loading_image_bird.png" alt="Loading Bird" style="margin-top: 250px;" />
+    </div>
+
   </body>
 </html>
