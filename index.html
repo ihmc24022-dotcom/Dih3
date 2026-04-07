@@ -1,148 +1,57 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Angry Birds Chrome</title>
-    <meta name="Title" content="Angry Birds Chrome">
-    <meta name="description" content="Play Angry Birds online in HD with Google Chrome">
-    <meta name="keywords" content="angry birds, free angry birds, online game, play online, angry birds app, chrome, google chrome, web browser, HD, arcade game, online, play angry birds online, web, application, game, iphone, android, ipad, slingshot, catapult, explosions, golden egg, levels, pigs, birds, stars, high scores, chrome os, chrome web store, angry birds rovio, play angry birds on computer, apps for chrome, play angry birds free">
+    <title>Angry Birds Chrome - Debug Mode</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <link href='https://fonts.googleapis.com/css?family=Terminal+Dosis:800' rel='stylesheet' type='text/css'>
-    <link rel="stylesheet" href="css/angry_birds_chrome.css" type="text/css">
-
-    <script type="text/javascript">
-      var _gaq = _gaq || [];
-      _gaq.push(['_setAccount', 'UA-23082676-1']);
-      _gaq.push(['_trackPageview']);
-
-      (function() {
-        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-        ga.src = 'https://ssl.google-analytics.com/ga.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-      })();
-    </script>
-
-    <script>
-        function externalLink(type) {
-            _gaq.push(['_trackEvent', 'Promo', 'Promotional Link: ' + type]);
-        }
-    </script>
-
-    <script type="text/javascript" src="fowl/fowl.nocache.js"></script>
-    
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    <script type="text/javascript">
-      if (typeof google !== 'undefined' && google.load) {
-        google.load('payments', '1.0', {
-            'packages': ['production_config']
-        });
+    <style>
+      #debug-log {
+        position: fixed; top: 0; left: 0; width: 100%; height: 30vh; 
+        background: rgba(0,0,0,0.9); color: #0f0; z-index: 9999; 
+        overflow-y: auto; font-family: monospace; font-size: 14px; padding: 10px;
+        box-sizing: border-box; word-wrap: break-word;
       }
-    </script>
-  </head>
-  <body>
-
-    <script type="text/javascript">
-        function getFlashVersion() {
-            try {
-                var version;
-                try {
-                    version = new ActiveXObject("ShockwaveFlash.ShockwaveFlash").GetVariable("$version");
-                } catch (e) {
-                    version = navigator.plugins["Shockwave Flash"].description;
-                }
-                return version.replace(/\D*(\d+).*/g, "$1");
-            } catch (e) {
-                return -1;
-            }
-        }
-
-        function haveAudioSupport() {
-            try {
-              var AudioContext = window.AudioContext || window.webkitAudioContext;
-              if (new AudioContext()) {
-                return true;
-              }
-            } catch (ignore) { }
-            return getFlashVersion() >= 9.0;
-        }
-    </script>
-
-    <script type="text/javascript">
-        if (!haveAudioSupport()) {
-          console.log("音频支持可能存在问题，但强行跳过重定向防止死循环。");
-        }
-    </script>
-
-    <table class="content-table">
-      <tr>
-        <td>
-          <div class="gamecont" id="content">
-            <div id='loginInfo'></div>
-            <div id='gameDiv' style="display: inline-block;">
-              
-              <div id='playn-root' style="border: 2px solid red; min-height: 400px; width: 800px; display: flex; justify-content: center; align-items: center;">
-                <div id="loading">
-                  <img src="images/loading_image_bird.png" alt="Loading Bird" />
-                </div>
-              </div>
-              
-              <div id="rovionews"></div>
-              <div id="videochapter"></div>              
-              <div id="ingameframecontainer"></div>
-              <div id="cornerframecontainer1"></div>
-            </div>
-            <div class='buttons'>
-              <div class='buttoncontainer'>
-                <div id='version-buttons'></div>
-                <script type="text/javascript">
-                  attemptInstall = function() {
-                    console.log("旧版 Chrome 商店安装已被禁用");
-                  }
-                </script>
-                <a id='installButton' href='#' onclick="attemptInstall(); return false;"></a>
-                <a href="#" class="loginButton" id="login"></a>
-                <a href="https://www.rovio.com/en/support" id="faqButton" onclick="externalLink('FAQ'); return false;"></a>
-              </div>
-              
-              <div id='social-container'>
-                <a id="twitterButton" href="https://twitter.com/share" class="twitter-share-button">Tweet</a>
-                <iframe id="fb-like-iframe" src="https://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fwww.facebook.com%2Fangrybirds&layout=button_count" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:160px; height:25px;" allowTransparency="true"></iframe>
-                <a href="https://www.google.com/chrome" id="optimized" onclick="externalLink('Optimized for Chrome'); return false;"></a>
-              </div>
-              <div id='tooltip'></div>
-              <script type="text/javascript">
-                tooltip = document.getElementById('tooltip');
-                resetTooltip = function() { tooltip.innerHTML = ""; }
-              </script>
-            </div>
-          </div>
-        </td>
-      </tr>
-    </table>
-
-    <iframe id='appcacheInstaller' style="display: none;"></iframe>
-
-    <noscript>
-      <div class="info-noscript">
-        Your web browser must have JavaScript enabled in order for this application to display correctly.
-      </div>
-    </noscript>
-
-    <script type="text/javascript">
-      // 强行显示游戏区域，防止被旧的 iframe 检测代码隐藏
-      window.onload = function() {
-        var content = document.getElementById('content');
-        if (content) {
-          content.style.display = 'block';
-          if (content.parentNode) content.parentNode.style.display = 'block';
-        }
-        var gameDiv = document.getElementById('gameDiv');
-        if (gameDiv) {
-          gameDiv.style.visibility = 'visible';
-          gameDiv.style.display = 'block';
-        }
-        console.log("已强行激活游戏区域，等待 GWT 引擎 (fowl.nocache.js) 加载...");
+    </style>
+    <script>
+      // 强行拦截所有报错
+      window.onerror = function(msg, url, line) {
+        var log = document.getElementById('debug-log');
+        if(log) log.innerHTML += '<br/>❌ 报错: ' + msg + ' (在第 ' + line + ' 行)';
+        return false;
+      };
+      // 强行拦截所有运行日志
+      var oldLog = console.log;
+      console.log = function(msg) {
+        var log = document.getElementById('debug-log');
+        if(log) log.innerHTML += '<br/>✅ 日志: ' + msg;
+        oldLog.apply(console, arguments);
       };
     </script>
 
+    <link href='https://fonts.googleapis.com/css?family=Terminal+Dosis:800' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="css/angry_birds_chrome.css" type="text/css">
+
+    <script type="text/javascript" src="fowl/fowl.nocache.js"></script>
+  </head>
+  <body>
+    <div id="debug-log">等待系统启动...<br/></div>
+
+    <div class="gamecont" id="content">
+      <div id='gameDiv' style="display: inline-block;">
+        <div id='playn-root' style="border: 2px solid red; min-height: 400px; width: 800px; display: flex; justify-content: center; align-items: center;">
+          <div id="loading">
+            <img src="images/loading_image_bird.png" alt="如果路径正确，这里会有一只鸟" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="text/javascript">
+      window.onload = function() {
+        console.log("网页已加载完成，正在等待 fowl.nocache.js 启动引擎...");
+        document.getElementById('content').style.display = 'block';
+      };
+    </script>
   </body>
 </html>
